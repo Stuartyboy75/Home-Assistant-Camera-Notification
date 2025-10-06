@@ -1,0 +1,30 @@
+alias: Front Camera Person GIThub Upload No LLM
+description: ""
+triggers:
+  - type: turned_on
+    device_id: 4068ed1bc844da6fcb32b10be1d71127
+    entity_id: binary_sensor.front_garden_person
+    domain: binary_sensor
+    trigger: device
+conditions: []
+actions:
+  - sequence:
+      - data:
+          filename: /config/www/frontgardenperson.jpg
+        enabled: true
+        target:
+          entity_id: camera.front_garden_sub
+        action: camera.snapshot
+      - data:
+          message: "\"Front Garden Person {{ now().strftime('%Y-%m-%d %H:%M') }}\""
+          title: Front Garden Person
+          data:
+            image: >-
+              https://YourNabucasaaddress.ui.nabu.casa/local/frontgardenperson.jpg
+            actions:
+              - action: URI
+                title: View Cameras
+                uri: shortcuts://run-shortcut?name=Open%20Reolink
+                icon: sfsymbols:camera.fill
+        action: notify.mobile_app_stuartscotts_iphone
+mode: single
