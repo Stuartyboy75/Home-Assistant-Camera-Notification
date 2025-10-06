@@ -1,0 +1,52 @@
+alias: Front Camera Person GIThub Upload LLM
+description: ""
+triggers:
+  - type: turned_on
+    device_id: 4068ed1bc844da6fcb32b10be1d71127
+    entity_id: binary_sensor.front_garden_person
+    domain: binary_sensor
+    trigger: device
+conditions: []
+actions:
+  - sequence:
+      - data:
+          filename: /config/www/frontgardenperson.jpg
+        enabled: true
+        target:
+          entity_id: camera.front_garden_sub
+        action: camera.snapshot
+      - action: llmvision.image_analyzer
+        metadata: {}
+        data:
+          remember: false
+          include_filename: false
+          target_width: 1280
+          max_tokens: 100
+          temperature: 0.2
+          generate_title: false
+          expose_images: false
+          expose_images_persist: false
+          provider: 01JHG3VMQKHZ2MA7NNT8H7C0DH
+          message: >-
+            Very briefly describe what you see in this image from my back garden
+            camera.If you see a person describe what thy look like. Your message
+            needs to be short to fit in a phone notification. Don't describe
+            stationary objects or buildings.
+          image_file: /config/www/frontgardenperson.jpg
+        response_variable: response
+      - data:
+          message: >-
+            {{response.response_text}} {{as_timestamp
+            (states.binary_sensor.front_garden_person.last_changed) | 
+            timestamp_custom("%-I:%M %p (%d-%m-%y)")}}
+          title: Front Garden Person
+          data:
+            image: >-
+              https://p6rlcoh6bbe3oo1vcsz8mjiun2jjr4qr.ui.nabu.casa/local/frontgardenperson.jpg
+            actions:
+              - action: URI
+                title: View Cameras
+                uri: shortcuts://run-shortcut?name=Open%20Reolink
+                icon: sfsymbols:camera.fill
+        action: notify.mobile_app_stuartscotts_iphone
+mode: single
