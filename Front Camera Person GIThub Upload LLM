@@ -42,7 +42,7 @@ actions:
           title: Front Garden Person
           data:
             image: >-
-              https://p6rlcoh6bbe3oo1vcsz8mjiun2jjr4qr.ui.nabu.casa/local/frontgardenperson.jpg
+              https://YourNabucasaaddress.ui.nabu.casa/local/frontgardenperson.jpg
             actions:
               - action: URI
                 title: View Cameras
